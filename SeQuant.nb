@@ -1,0 +1,490 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     17701,        481]
+NotebookOptionsPosition[     17224,        459]
+NotebookOutlinePosition[     17585,        475]
+CellTagsIndexPosition[     17542,        472]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["SeQuant: toolkit for second quantized expressions", "Title"],
+
+Cell[TextData[{
+ "\nThis is a collection of tools that assist in manipulating expressions \
+encoutered in second quantized form of quantum mechanics\n\nUser-level \
+functions:\n    createParticleIndex[a_String, b_particleSpace]\t\t\tcreate \
+particleIndex object describing index \"a\" that belongs to space b\n    \
+createSQS[cre_List, ann_List]\t\t\t\t\tcreate SQ strings of creation(cre) and \
+annihilation(ann) operators (in normal form)\n    createSQM[O_String, \
+bra_List, ket_List, psym_indexSymm]\tcreate SQ matrix elements of operator \
+\"O\" between bra and ket. Permutational symmetry of the operator\n     \t\t\t\
+\t\t\t\t\t\tis described by psym\n    wick[expr_, extInds_List,<opt_List>]\t\t\
+\t\tapply Wick's theorem to expr with options specified by opt. extInds is a \
+list of ",
+ StyleBox["external",
+  FontSlant->"Italic"],
+ " indices (i.e. over\n     \t\t\t\t\t\t\t\t\twhich not to perform summation. \
+The argument opt is optional\n      \t\t\t\t\t\t\t\t\tDefault options:\n      \
+\t\t\t\t\t\t\t\t\tfullContract->True\t\tonly leave fully contracted terms \
+(set to False to compute matrix elements)\n      \t\t\t\t\t\t\t\t\t\
+noCoincidences->False\tthere may be coincidences between external indices \
+(should be set\n      \t\t\t\t\t\t\t\t\t\t\t\t\tto True if less general \
+expressions for matrix elements are to be obtained)\n      \t\t\t\t\t\t\t\t\t\
+doSums->True\t\t\tcarry out summation over ",
+ StyleBox["internal",
+  FontSlant->"Italic"],
+ " indices (indices present in\n      \t\t\t\t\t\t\t\t\t\t\t\t\texpr and not \
+found in extInds)\n      \t\t\t\t\t\t\t\t\tdoReindex->True\t\tsimplify \
+further the expression by reindexing internal indices into\n      \t\t\t\t\t\t\
+\t\t\t\t\t\t\tcanonical order\n      \t\t\t\t\t\t\t\t\t"
+}], "Text",
+ CellChangeTimes->{{3.4385997255205107`*^9, 3.438599729818346*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["A short example of how SeQuant is used", "Section"],
+
+Cell[TextData[{
+ "Open SeQuant.m file in ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " and load package (we will make loading the package simpler ... real \
+soon!), then execute the following cell to run the example."
+}], "Text",
+ CellChangeTimes->{{3.612705594359714*^9, 3.612705623430194*^9}, 
+   3.612883681335047*^9, {3.612889352965679*^9, 3.612889367412672*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"(*", " ", 
+    RowBox[{"One", "-", 
+     RowBox[{"particle", " ", "indices"}]}], " ", "*)"}], "Commentary"], 
+  StyleBox["\[IndentingNewLine]", "Commentary"], 
+  RowBox[{
+   RowBox[{
+    RowBox[{"i", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<i\>\"", ",", "occ"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"j", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<j\>\"", ",", "occ"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"k", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<k\>\"", ",", "occ"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"l", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<l\>\"", ",", "occ"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"m", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<m\>\"", ",", "occ"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"n", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<n\>\"", ",", "occ"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"a", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<a\>\"", ",", "virt"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"b", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<b\>\"", ",", "virt"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"c", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<c\>\"", ",", "virt"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"d", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<d\>\"", ",", "virt"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"e", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<e\>\"", ",", "virt"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"f", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<f\>\"", ",", "virt"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"p", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<p\>\"", ",", "any"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"q", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<q\>\"", ",", "any"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"r", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<r\>\"", ",", "any"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"s", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<s\>\"", ",", "any"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"\[Alpha]", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<\[Alpha]\>\"", ",", "allvirt"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"\[Beta]", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<\[Beta]\>\"", ",", "allvirt"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"\[Gamma]", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<\[Gamma]\>\"", ",", "allvirt"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"\[Delta]", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<\[Delta]\>\"", ",", "allvirt"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"\[Kappa]", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<\[Kappa]\>\"", ",", "allany"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"\[Lambda]", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<\[Lambda]\>\"", ",", "allany"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"\[Mu]", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<\[Mu]\>\"", ",", "allany"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"\[Nu]", "=", 
+     RowBox[{"createParticleIndex", "[", 
+      RowBox[{"\"\<\[Nu]\>\"", ",", "allany"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   StyleBox[
+    RowBox[{"(*", " ", "Hamiltonian", " ", "*)"}], "Commentary"], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"g2", "=", 
+     RowBox[{"createSQM", "[", 
+      RowBox[{
+       RowBox[{"defaultHamiltonianOpers", "[", 
+        RowBox[{"[", "2", "]"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\[Mu]", ",", "\[Nu]"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\[Kappa]", ",", "\[Lambda]"}], "}"}], ",", "antisymm"}], 
+      "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"ga2", "=", 
+     RowBox[{"createSQS", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\[Mu]", ",", "\[Nu]"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\[Kappa]", ",", "\[Lambda]"}], "}"}]}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"H2", "=", 
+     RowBox[{
+      RowBox[{"1", "/", "4"}], " ", "g2", "*", "ga2"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"f1", "=", 
+     RowBox[{"createSQM", "[", 
+      RowBox[{
+       RowBox[{"defaultHamiltonianOpers", "[", 
+        RowBox[{"[", "1", "]"}], "]"}], ",", 
+       RowBox[{"{", "\[Mu]", "}"}], ",", 
+       RowBox[{"{", "\[Nu]", "}"}], ",", "antisymm"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"ga1", "=", 
+     RowBox[{"createSQS", "[", 
+      RowBox[{
+       RowBox[{"{", "\[Mu]", "}"}], ",", 
+       RowBox[{"{", "\[Nu]", "}"}]}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"H1", "=", " ", 
+     RowBox[{"f1", "*", "ga1"}]}], ";"}], "\[IndentingNewLine]", "\n", 
+   StyleBox[
+    RowBox[{"(*", " ", 
+     RowBox[{"Cluster", " ", "operators"}], " ", "*)"}], "Commentary"], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"T1ia", "=", 
+     RowBox[{
+      RowBox[{"createSQM", "[", 
+       RowBox[{"\"\<t\>\"", ",", 
+        RowBox[{"{", "a", "}"}], ",", 
+        RowBox[{"{", "i", "}"}], ",", "antisymm"}], "]"}], "*", 
+      RowBox[{"createSQS", "[", 
+       RowBox[{
+        RowBox[{"{", "a", "}"}], ",", 
+        RowBox[{"{", "i", "}"}]}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"T1jb", "=", 
+     RowBox[{
+      RowBox[{"createSQM", "[", 
+       RowBox[{"\"\<t\>\"", ",", 
+        RowBox[{"{", "b", "}"}], ",", 
+        RowBox[{"{", "j", "}"}], ",", "antisymm"}], "]"}], "*", 
+      RowBox[{"createSQS", "[", 
+       RowBox[{
+        RowBox[{"{", "b", "}"}], ",", 
+        RowBox[{"{", "j", "}"}]}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"T1kc", "=", 
+     RowBox[{
+      RowBox[{"createSQM", "[", 
+       RowBox[{"\"\<t\>\"", ",", 
+        RowBox[{"{", "c", "}"}], ",", 
+        RowBox[{"{", "k", "}"}], ",", "antisymm"}], "]"}], "*", 
+      RowBox[{"createSQS", "[", 
+       RowBox[{
+        RowBox[{"{", "c", "}"}], ",", 
+        RowBox[{"{", "k", "}"}]}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"T1ld", "=", 
+     RowBox[{
+      RowBox[{"createSQM", "[", 
+       RowBox[{"\"\<t\>\"", ",", 
+        RowBox[{"{", "d", "}"}], ",", 
+        RowBox[{"{", "l", "}"}], ",", "antisymm"}], "]"}], "*", 
+      RowBox[{"createSQS", "[", 
+       RowBox[{
+        RowBox[{"{", "d", "}"}], ",", 
+        RowBox[{"{", "l", "}"}]}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"T2ijab", "=", 
+     RowBox[{
+      RowBox[{"1", "/", "4"}], "*", 
+      RowBox[{"createSQM", "[", 
+       RowBox[{"\"\<t\>\"", ",", 
+        RowBox[{"{", 
+         RowBox[{"a", ",", "b"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "j"}], "}"}], ",", "antisymm"}], "]"}], "*", 
+      RowBox[{"createSQS", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"a", ",", "b"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "j"}], "}"}]}], "]"}]}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"T2klcd", "=", 
+     RowBox[{
+      RowBox[{"1", "/", "4"}], "*", 
+      RowBox[{"createSQM", "[", 
+       RowBox[{"\"\<t\>\"", ",", 
+        RowBox[{"{", 
+         RowBox[{"c", ",", "d"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"k", ",", "l"}], "}"}], ",", "antisymm"}], "]"}], "*", 
+      RowBox[{"createSQS", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"c", ",", "d"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"k", ",", "l"}], "}"}]}], "]"}]}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"T2mnef", "=", 
+     RowBox[{
+      RowBox[{"1", "/", "4"}], "*", 
+      RowBox[{"createSQM", "[", 
+       RowBox[{"\"\<t\>\"", ",", 
+        RowBox[{"{", 
+         RowBox[{"e", ",", "f"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"m", ",", "n"}], "}"}], ",", "antisymm"}], "]"}], "*", 
+      RowBox[{"createSQS", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"e", ",", "f"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"m", ",", "n"}], "}"}]}], "]"}]}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   StyleBox[
+    RowBox[{"(*", " ", 
+     RowBox[{"Annihilation", " ", "operators"}], " ", "*)"}], "Commentary"], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"P1nfL", "=", 
+     RowBox[{"createSQS", "[", 
+      RowBox[{
+       RowBox[{"{", "n", "}"}], ",", 
+       RowBox[{"{", "e", "}"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"P2mnefL", "=", 
+     RowBox[{"createSQS", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"m", ",", "n"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"e", ",", "f"}], "}"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   StyleBox[
+    RowBox[{"(*", " ", 
+     RowBox[{"Print", " ", "definitions"}], " ", "*)"}], "Commentary"], 
+   "\[IndentingNewLine]", 
+   RowBox[{"Print", "[", 
+    RowBox[{"\"\<\!\(\*SuperscriptBox[\(H\), \((0)\)]\) = \>\"", ",", 
+     RowBox[{"H1", "//", "TraditionalForm"}]}], "]"}], "\[IndentingNewLine]", 
+   
+   RowBox[{"Print", "[", 
+    RowBox[{"\"\<\!\(\*SuperscriptBox[\(H\), \((1)\)]\) = \>\"", ",", 
+     RowBox[{"H2", "//", "TraditionalForm"}]}], "]"}], "\[IndentingNewLine]", 
+   
+   RowBox[{"Print", "[", 
+    RowBox[{"\"\<\!\(\*SubscriptBox[\(T\), \(1\)]\) = \>\"", ",", 
+     RowBox[{"T1ia", "//", "TraditionalForm"}]}], "]"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"Print", "[", 
+    RowBox[{"\"\<\!\(\*SubscriptBox[\(T\), \(2\)]\) = \>\"", ",", 
+     RowBox[{"T2ijab", "//", "TraditionalForm"}]}], "]"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"Print", "[", 
+    RowBox[{"\"\<<2| = \>\"", ",", 
+     RowBox[{"P2mnefL", "//", "TraditionalForm"}]}], "]"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   StyleBox[
+    RowBox[{"(*", " ", 
+     RowBox[{
+     "contract", " ", "H1", " ", "with", " ", "T2", " ", "and", " ", 
+      "project", " ", "onto", " ", "a", " ", "doubly", " ", "excited", " ", 
+      "space"}], " ", "*)"}], "Commentary"], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tmp", "=", 
+     RowBox[{"wick", "[", 
+      RowBox[{
+       RowBox[{"P2mnefL", "**", "H1", "**", "T2ijab"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"m", ",", "n", ",", "e", ",", "f"}], "}"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"Print", "[", 
+    RowBox[{
+    "\"\<<2|\!\(\*SuperscriptBox[\(H\), \((0)\)]\) \!\(\*SubscriptBox[\(T\), \
+\(2\)]\)|0> = \>\"", ",", 
+     RowBox[{"tmp", "//", "TraditionalForm"}]}], "]"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tmp", "=", 
+     RowBox[{"canonMO", "[", 
+      RowBox[{"tmp", ",", 
+       RowBox[{"{", 
+        RowBox[{"m", ",", "n", ",", "e", ",", "f"}], "}"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"Print", "[", 
+    RowBox[{"\"\<same using canonical MO = \>\"", ",", 
+     RowBox[{
+      RowBox[{"Simplify", "[", "tmp", "]"}], "//", "TraditionalForm"}]}], 
+    "]"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   StyleBox[
+    RowBox[{"(*", " ", 
+     RowBox[{
+     "contract", " ", "H2", " ", "with", " ", "T2", " ", "and", " ", 
+      "project", " ", "onto", " ", "a", " ", "doubly", " ", "excited", " ", 
+      "space"}], " ", "*)"}], "Commentary"], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tmp", "=", 
+     RowBox[{"wick", "[", 
+      RowBox[{
+       RowBox[{"P2mnefL", "**", "H2", "**", "T2ijab"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"m", ",", "n", ",", "e", ",", "f"}], "}"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"Print", "[", 
+    RowBox[{
+    "\"\<<2|\!\(\*SuperscriptBox[\(H\), \((1)\)]\) \!\(\*SubscriptBox[\(T\), \
+\(2\)]\)|0> = \>\"", ",", 
+     RowBox[{"tmp", "//", "TraditionalForm"}]}], "]"}], "\[IndentingNewLine]",
+    "\[IndentingNewLine]", 
+   StyleBox[
+    RowBox[{"(*", " ", 
+     RowBox[{
+     "contract", " ", "H2", " ", "with", " ", "two", " ", "T2", " ", "and", 
+      " ", "project", " ", "onto", " ", "a", " ", "doubly", " ", "excited", 
+      " ", "space"}], " ", "*)"}], "Commentary"], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tmp", "=", 
+     RowBox[{"wick", "[", 
+      RowBox[{
+       RowBox[{"P2mnefL", "**", "H2", "**", "T2ijab", "**", "T2klcd"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"m", ",", "n", ",", "e", ",", "f"}], "}"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"Print", "[", 
+    RowBox[{
+    "\"\<<2|\!\(\*SuperscriptBox[\(H\), \((1)\)]\) \!\(\*SubscriptBox[\(T\), \
+\(2\)]\) \!\(\*SubscriptBox[\(T\), \(2\)]\)|0> = \>\"", ",", 
+     RowBox[{"tmp", "//", "TraditionalForm"}]}], "]"}], "\[IndentingNewLine]",
+    "\[IndentingNewLine]", 
+   StyleBox[
+    RowBox[{"(*", " ", 
+     RowBox[{
+     "contract", " ", "H2", " ", "with", " ", "four", " ", "T1", " ", "and", 
+      " ", "project", " ", "onto", " ", "a", " ", "doubly", " ", "excited", 
+      " ", "space"}], " ", "*)"}], "Commentary"], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tmp", "=", 
+     RowBox[{"wick", "[", 
+      RowBox[{
+       RowBox[{
+       "P2mnefL", "**", "H2", "**", "T1ia", "**", "T1jb", "**", "T1kc", "**", 
+        "T1ld"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"m", ",", "n", ",", "e", ",", "f"}], "}"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"Print", "[", 
+    RowBox[{
+    "\"\<<2|\!\(\*SuperscriptBox[\(H\), \((1)\)]\) \!\(\*SubscriptBox[\(T\), \
+\(1\)]\) \!\(\*SubscriptBox[\(T\), \(1\)]\) \!\(\*SubscriptBox[\(T\), \
+\(1\)]\) \!\(\*SubscriptBox[\(T\), \(1\)]\)|0> = \>\"", ",", 
+     RowBox[{"tmp", "//", "TraditionalForm"}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.612632067195696*^9, 3.6126320779865093`*^9}, {
+   3.612883639624544*^9, 3.612883677246471*^9}, {3.612888839791676*^9, 
+   3.612888841151188*^9}, 3.6128893476593933`*^9}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1440, 852},
+WindowMargins->{{-1625, Automatic}, {Automatic, 147}},
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (January 25, \
+2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 66, 0, 92, "Title"],
+Cell[648, 24, 1836, 29, 372, "Text"],
+Cell[CellGroupData[{
+Cell[2509, 57, 57, 0, 80, "Section"],
+Cell[2569, 59, 376, 8, 30, "Text"],
+Cell[2948, 69, 14248, 386, 1254, "Input"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
