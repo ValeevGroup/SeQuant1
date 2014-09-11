@@ -1,6 +1,6 @@
 (* ::Package:: *)
 
-(*BeginPackage["SeQuant`"]*)
+(*BeginPackage["SeQuant`"];*)
 
 (* Setting up internal things *)
 Off[General::spell];
@@ -10,23 +10,23 @@ $IterationLimit = Infinity;
 (*SetOptions[$FrontEnd,CommonDefaultFormatTypes->{"Output"->TraditionalForm}];*)
 NCM = NonCommutativeMultiply;
 
+
+(* ::Section:: *)
+(* Global Parameters *)
+
+
 (*
 Special Operators
 *)
 Unprotect[defaultHamiltonianOpers];
 Unprotect[ignoreDisconnectedOpers];
 Unprotect[ignoreConnectedOpers];
-defaultHamiltonianOpers = {"F","g","Overscript[g, _]"};
+defaultHamiltonianOpers = {"F","g","\!\(\*OverscriptBox[\(g\), \(_\)]\)"};
 ignoreDisconnectedOpers = {};
 ignoreConnectedOpers = {};
 Protect[ignoreConnectedOpers];
 Protect[ignoreDisconnectedOpers];
 Protect[defaultHamiltonianOpers];
-
-
-
-(* ::Section:: *)
-(* Global Parameters *)
 
 
 (*
@@ -42,10 +42,6 @@ SeQuantVacuumChoices["MultiConfiguration"] = 2;
 If[ !ValueQ[SeQuantVacuum],
     SeQuantVacuum = SeQuantVacuumChoices["SingleConfiguration"]
 ];
-
-
-(* ::Section:: *)
-(* Space Class *)
 
 
 (* Definition of spaces *)
@@ -89,9 +85,9 @@ DefaultSpaceSymbol[any] = "p";
 DefaultSpaceSymbol[allany] = "\[Kappa]";
 
 
-
 (* ::Section:: *)
-(* particleIndex class *)
+(* particleIndex Class *)
+
 
 
 (* create particleIndex with space and symbol i *)
@@ -242,7 +238,7 @@ untagIndices[expr_,inds_List] :=
 
 
 (* ::Section:: *)
-(*  SQS class  *)
+(* SQS Class *)
 
 
 (*
@@ -386,7 +382,7 @@ visualizeSQE[a_SQS] :=
 (* convention labels strings normal-ordered wrt to nonphysical vacuum as tilde{a} *)
         bodyLabel = If[ SeQuantVacuum==SeQuantVacuumChoices["Physical"],
                         "a",
-                        OverTilde["a"]
+                        "\[ATilde]"
                     ];
         supInds = "";
         subInds = "";
@@ -1871,7 +1867,7 @@ zeroDensity[expr_] :=
     MemberQ[x,y_particleIndex/;spaceWRTFermiLevel[indexSpace[y]]===+1]->0
 
 (* toolkit is ready *)
-Print["SeQuant is loaded and ready...\n"]
+Print["SeQuant is loaded and ready...\n"];
 (*EndPackage[]*)
 
 
